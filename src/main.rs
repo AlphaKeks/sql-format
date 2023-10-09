@@ -37,7 +37,7 @@ fn main() -> Result<()> {
 
 	eprintln!("Read input.");
 
-	let output = sqlformat::format(&input, &QueryParams::None, FormatOptions {
+	let mut output = sqlformat::format(&input, &QueryParams::None, FormatOptions {
 		indent: match args.spaces {
 			None => Indent::Tabs,
 			Some(count) => Indent::Spaces(count),
@@ -45,6 +45,10 @@ fn main() -> Result<()> {
 		uppercase: !args.lowercase,
 		lines_between_queries: 2,
 	});
+
+	if std::io::stdout().is_terminal() {
+		output.push('\n');
+	}
 
 	if let Some(file) = args.output_file {
 		std::fs::write(file, output).context("Failed to write to file.")?;
