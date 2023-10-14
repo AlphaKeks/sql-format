@@ -35,8 +35,6 @@ fn main() -> Result<()> {
 			.context("Failed to read STDIN.")?;
 	}
 
-	eprintln!("Read input.");
-
 	let mut output = sqlformat::format(&input, &QueryParams::None, FormatOptions {
 		indent: match args.spaces {
 			None => Indent::Tabs,
@@ -58,30 +56,25 @@ fn main() -> Result<()> {
 			.context("Failed to write to STDOUT.")?;
 	}
 
-	eprintln!("Wrote output.");
-
 	Ok(())
 }
 
+/// This program formats SQL code.
 #[derive(Parser)]
 struct Args {
-	/// File to read input from.
-	///
-	/// If this is not specified, STDIN will be used instead.
+	/// Read the input from a file instead of stdin.
 	#[arg(short, long, value_name = "PATH")]
 	input_file: Option<PathBuf>,
 
-	/// File to write output to.
-	///
-	/// If this is not specified, STDOUT will be used instead.
+	/// Write the output to a file instead of stdout.
 	#[arg(short, long, value_name = "PATH")]
 	output_file: Option<PathBuf>,
 
-	/// Whether to use spaces for indentation.
-	#[arg(long)]
+	/// Use spaces for indentation.
+	#[arg(long, value_name = "AMOUNT")]
 	spaces: Option<u8>,
 
-	/// Whether to use lowercase for SQL keywords.
+	/// Use lowercase for SQL keywords.
 	#[arg(long)]
 	lowercase: bool,
 }
